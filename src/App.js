@@ -3,6 +3,7 @@ import * as BooksAPI from './utils/BooksAPI';
 import './App.css';
 import AppHeader from './AppHeader';
 import BookShelf from './BookShelf';
+import SearchBooks from './SearchBooks';
 
 const CATEGORY_CURRENTLY_READING = 'currentlyreading';
 const CATEGORY_WANT_TO_READ = 'wanttoread';
@@ -35,8 +36,7 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll()
       .then(books => {
-        console.dir(books);
-        books.map(book => {
+        books.forEach(book => {
           const shelf = book.shelf.toLowerCase();
           if (!this.categories.includes(shelf))
             return;
@@ -53,28 +53,7 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author" />
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
-        ) : (
+        {this.state.showSearchPage ? <SearchBooks /> : (
             <div className="list-books">
               <AppHeader headerText='MyReads' />
               <div className="list-books-content">

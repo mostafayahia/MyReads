@@ -4,7 +4,7 @@ import Book from './Book';
 const BookList = ({ books }) => (
     <ol className="books-grid">
         {
-            books.map((book, index) => (
+            books && books.length && books.map((book, index) => (
                 <Book key={index}
                     title={book.title}
                     authors={book.authors}
