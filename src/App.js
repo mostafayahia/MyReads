@@ -1,25 +1,20 @@
 import React from 'react';
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './utils/BooksAPI';
 import './App.css';
 import AppHeader from './AppHeader';
 import BookShelf from './BookShelf';
 
-const booksPerShelf = {
-  'Currently Reading': [
-    {
-      imageURL: 'http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api',
-      title: 'To Kill a Mockingbird',
-      authors: 'Harper Lee'
-    },
-    {
-      imageURL: 'http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api',
-      title: 'Ender\'s Game',
-      authors: 'Orson Scott Card'
-    },
-  ]
-}
+const CATEGORY_CURRENTLY_READING = 'currentlyreading';
+const CATEGORY_WANT_TO_READ = 'wanttoRead';
+const CATEGORY_READ = 'read';
 
 class BooksApp extends React.Component {
+  categories = [
+    CATEGORY_CURRENTLY_READING,
+    CATEGORY_WANT_TO_READ,
+    CATEGORY_READ
+  ];
+
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -27,7 +22,31 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    showSearchPage: false
+    showSearchPage: false,
+    booksPerShelf: this.initBooksPerShelf()
+  };
+
+  initBooksPerShelf() {
+    const booksPerShelf = {};
+    this.categories.map(c => booksPerShelf[c] = []);
+    return booksPerShelf;
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll()
+      .then(books => {
+        books.map(book => {
+          const shelf = book.shelf.toLowerCase();
+          if (!this.categories.includes(shelf))
+            return;
+          this.setState(prevState => ({
+            booksPerShelf: {
+              ...prevState.booksPerShelf,
+              [shelf]: prevState.booksPerShelf[shelf].concat([book])
+            }
+          }))
+        })
+      });
   }
 
   render() {
@@ -59,7 +78,7 @@ class BooksApp extends React.Component {
               <AppHeader headerText='MyReads' />
               <div className="list-books-content">
 
-                <BookShelf title='Currently Reading' books={booksPerShelf['Currently Reading']} />
+                <BookShelf title='Currently Reading' books={this.state.booksPerShelf[CATEGORY_CURRENTLY_READING]} />
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
                   <div className="bookshelf-books">

@@ -8,7 +8,7 @@ const BookList = ({ books }) => (
                 <Book key={index}
                     title={book.title}
                     authors={book.authors}
-                    imageURL={book.imageURL} />
+                    imageURL={book.imageLinks["thumbnail"]} />
             ))
         }
     </ol>
