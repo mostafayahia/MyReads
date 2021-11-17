@@ -9,7 +9,7 @@ const Book = ({ title, authors, imageURL }) => (
                 <BookShelfChanger />
             </div>
             <div className="book-title">{title}</div>
-            <div className="book-authors">{authors}</div>
+            <div className="book-authors">{authors.join(', ')}</div>
         </div>
     </li>
 );
