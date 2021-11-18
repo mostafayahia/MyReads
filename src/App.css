@@ -139,6 +139,10 @@ button:active {
   text-align: left;
 }
 
+.search-books-grid {
+  padding-top: 70px;
+}
+
 .book {
   width: 140px;
 }

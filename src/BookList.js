@@ -1,14 +1,17 @@
 import React from 'react';
 import Book from './Book';
 
-const BookList = ({ books }) => (
+const BookList = ({ books, onShelfChange }) => (
     <ol className="books-grid">
         {
-            books && books.length && books.map((book, index) => (
-                <Book key={index}
+            books && books.map(book => (
+                <Book key={book.id}
+                    id={book.id}
                     title={book.title}
                     authors={book.authors}
-                    imageURL={(book.imageLinks && book.imageLinks['thumbnail']) || ''} />
+                    imageURL={(book.imageLinks && book.imageLinks['thumbnail']) || book.imageURL || ''}
+                    shelf={book.shelf}
+                    onShelfChange={onShelfChange} />
             ))
         }
     </ol>

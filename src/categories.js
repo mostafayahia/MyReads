@@ -1,7 +1,5 @@
-// all categories in lower case, you have to convert toLowerCase() 
-// for comparison when fetching from api
-const CATEGORY_VAL_CURRENTLY_READING = 'currentlyreading';
-const CATEGORY_VAL_WANT_TO_READ = 'wanttoread';
+const CATEGORY_VAL_CURRENTLY_READING = 'currentlyReading';
+const CATEGORY_VAL_WANT_TO_READ = 'wantToRead';
 const CATEGORY_VAL_READ = 'read';
 
 

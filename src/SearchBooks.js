@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SearchBookList from './SearchBookList';
 import { Link } from 'react-router-dom';
+import * as categories from './categories';
 
 class SearchBooks extends Component {
     state = {
@@ -10,6 +11,22 @@ class SearchBooks extends Component {
     inputChangeHandler = event => {
         const { value } = event.target;
         this.setState(() => ({ searchTerm: value }));
+    }
+
+    addShelfToBooks(books) {
+        const { booksPerShelf } = this.props;
+        if (!books || !books.length) {
+            return;
+        }
+
+        books.forEach(book => {
+            categories.values.forEach(v => {
+                if (booksPerShelf[v].filter(book2 => book2.id === book.id)[0]) {
+                    book.shelf = v;
+                }
+            })
+            book.shelf = book.shelf || categories.NO_CATEGORY_VAL;
+        })
     }
 
 
@@ -34,7 +51,8 @@ class SearchBooks extends Component {
 
                     </div>
                 </div>
-                <SearchBookList searchTerm={this.state.searchTerm} />
+                <SearchBookList addShelfToBooks={books => this.addShelfToBooks(books)}
+                    searchTerm={this.state.searchTerm} onShelfChange={this.props.onShelfChange} />
             </div>
         );
     }

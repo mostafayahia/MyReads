@@ -28,11 +28,8 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll()
       .then(books => {
-        console.log('all books', books);
         books.forEach(book => {
-          // categories keys all in lower case so you have to 
-          // convert to lower case for comparison
-          const shelf = book.shelf.toLowerCase();
+          const shelf = book.shelf;
 
           if (!categories.values.includes(shelf))
             return;
@@ -47,6 +44,31 @@ class BooksApp extends React.Component {
       });
   }
 
+  moveBookToShelf(book, shelf) {
+    this.removeBookFromShelfs(book);
+
+    if (shelf !== categories.NO_CATEGORY_VAL) {
+      book = { ...book, shelf };
+      this.setState(prevState => ({
+        booksPerShelf: {
+          ...prevState.booksPerShelf,
+          [shelf]: prevState.booksPerShelf[shelf].concat([book])
+        }
+      }));
+    }
+
+    BooksAPI.update(book, shelf);
+  }
+
+  removeBookFromShelfs(book) {
+    categories.values.forEach(v => this.setState(prevState => ({
+      booksPerShelf: {
+        ...prevState.booksPerShelf,
+        [v]: prevState.booksPerShelf[v].filter(b => b.id !== book.id)
+      }
+    })));
+  }
+
   render() {
     return (
       <div className="app">
@@ -54,8 +76,10 @@ class BooksApp extends React.Component {
           <div className="list-books">
             <AppHeader headerText='MyReads' />
             <div className="list-books-content">
-              {categories.values.map((key, index) => (
-                <BookShelf key={index} title={categories.labels[index]} books={this.state.booksPerShelf[key]} />
+              {categories.values.map((val, index) => (
+                <BookShelf key={index} title={categories.labels[index]}
+                  onShelfChange={(book, shelf) => this.moveBookToShelf(book, shelf)}
+                  books={this.state.booksPerShelf[val]} />
               ))}
             </div>
             <div className="open-search">
@@ -63,7 +87,8 @@ class BooksApp extends React.Component {
             </div>
           </div>
         )} />
-        <Route path="/search" component={SearchBooks} />
+        <Route path="/search" render={() => <SearchBooks booksPerShelf={this.state.booksPerShelf}
+          onShelfChange={(book, shelf) => this.moveBookToShelf(book, shelf)} />} />
       </div>
     )
   }

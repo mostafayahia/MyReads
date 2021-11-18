@@ -14,7 +14,7 @@ class SearchBookList extends Component {
 
         // to avoid infinit loop we fetch data only if props change
         if (prevProps.searchTerm.trim() !== searchTerm) {
-            this.fetchData(searchTerm);   
+            this.fetchData(searchTerm);
         }
     }
 
@@ -26,23 +26,28 @@ class SearchBookList extends Component {
     }
 
     updateBooks(books) {
-        console.log(books);
-        books && !books.error && books.forEach((book, index) => {
+        // if there is an error, we will clear books search result
+        if (!books || books.error) {
+            this.setState(() => ({ books: [] }));
+            return;
+        }
+
+        this.props.addShelfToBooks(books);
+
+        books.forEach((book, index) => {
             if (index === 0) {
-                this.setState(() => ({books: []}));
+                this.setState(() => ({ books: [] }));
             } else {
-                this.setState(prevState => ({books: [...prevState.books, book]}));
+                this.setState(prevState => ({ books: [...prevState.books, book] }));
             }
         });
-        
-        // if there is an error, we will clear books search result
-        if (books.error)  {
-            this.setState(() => ({books: []})); 
-        }
+
     }
 
     render() {
-        return this.props.searchTerm ? <BookList books={this.state.books} /> : null;
+        return this.props.searchTerm ? <div className="search-books-grid">
+            <BookList books={this.state.books} onShelfChange={this.props.onShelfChange} />
+        </div> : null;
     }
 }
 
