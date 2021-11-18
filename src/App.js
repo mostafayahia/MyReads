@@ -21,19 +21,20 @@ class BooksApp extends React.Component {
 
   initBooksPerShelf() {
     const booksPerShelf = {};
-    categories.keys.map(k => booksPerShelf[k] = []);
+    categories.values.map(k => booksPerShelf[k] = []);
     return booksPerShelf;
   }
 
   componentDidMount() {
     BooksAPI.getAll()
       .then(books => {
+        console.log('all books', books);
         books.forEach(book => {
           // categories keys all in lower case so you have to 
           // convert to lower case for comparison
           const shelf = book.shelf.toLowerCase();
 
-          if (!categories.keys.includes(shelf))
+          if (!categories.values.includes(shelf))
             return;
 
           this.setState(prevState => ({
@@ -53,7 +54,7 @@ class BooksApp extends React.Component {
           <div className="list-books">
             <AppHeader headerText='MyReads' />
             <div className="list-books-content">
-              {categories.keys.map((key, index) => (
+              {categories.values.map((key, index) => (
                 <BookShelf key={index} title={categories.labels[index]} books={this.state.booksPerShelf[key]} />
               ))}
             </div>

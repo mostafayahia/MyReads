@@ -26,6 +26,7 @@ class SearchBookList extends Component {
     }
 
     updateBooks(books) {
+        console.log(books);
         books && !books.error && books.forEach((book, index) => {
             if (index === 0) {
                 this.setState(() => ({books: []}));

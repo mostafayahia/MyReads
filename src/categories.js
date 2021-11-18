@@ -1,17 +1,17 @@
 // all categories in lower case, you have to convert toLowerCase() 
 // for comparison when fetching from api
-const CATEGORY_KEY_CURRENTLY_READING = 'currentlyreading';
-const CATEGORY_KEY_WANT_TO_READ = 'wanttoread';
-const CATEGORY_KEY_READ = 'read';
+const CATEGORY_VAL_CURRENTLY_READING = 'currentlyreading';
+const CATEGORY_VAL_WANT_TO_READ = 'wanttoread';
+const CATEGORY_VAL_READ = 'read';
 
 
-// 2 arrays for keys & labels but every key index
+// 2 arrays for values & labels but every value index
 // corresponding to a label for the same index in labels array
 
-export const keys = [
-    CATEGORY_KEY_CURRENTLY_READING,
-    CATEGORY_KEY_WANT_TO_READ,
-    CATEGORY_KEY_READ
+export const values = [
+    CATEGORY_VAL_CURRENTLY_READING,
+    CATEGORY_VAL_WANT_TO_READ,
+    CATEGORY_VAL_READ
 ];
 
 export const labels = [
@@ -20,6 +20,6 @@ export const labels = [
     'Read'
 ];
 
-export const NO_CATEGORY_KEY = 'none';
+export const NO_CATEGORY_VAL = 'none';
 export const NO_CATEGORY_LABEL = 'None';
 
