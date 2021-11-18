@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SearchBookList from './SearchBookList';
+import { Link } from 'react-router-dom';
 
 class SearchBooks extends Component {
     state = {
@@ -11,11 +12,12 @@ class SearchBooks extends Component {
         this.setState(() => ({ searchTerm: value }));
     }
 
+
     render() {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <button className="close-search">Close</button>
+                    <Link to="/" className="close-search">Close</Link>
                     <div className="search-books-input-wrapper">
                         {/*
                     NOTES: The search from BooksAPI is limited to a particular set of search terms.

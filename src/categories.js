@@ -5,6 +5,9 @@ const CATEGORY_KEY_WANT_TO_READ = 'wanttoread';
 const CATEGORY_KEY_READ = 'read';
 
 
+// 2 arrays for keys & labels but every key index
+// corresponding to a label for the same index in labels array
+
 export const keys = [
     CATEGORY_KEY_CURRENTLY_READING,
     CATEGORY_KEY_WANT_TO_READ,
