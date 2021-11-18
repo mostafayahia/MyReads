@@ -57,7 +57,7 @@ class BooksApp extends React.Component {
                 <BookShelf key={index} title={categories.labels[index]} books={this.state.booksPerShelf[key]} />
               ))}
             </div>
-            <div to className="open-search">
+            <div className="open-search">
               <Link to="/search">Add a book</Link>
             </div>
           </div>
