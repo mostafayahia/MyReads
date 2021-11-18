@@ -4,18 +4,10 @@ import './App.css';
 import AppHeader from './AppHeader';
 import BookShelf from './BookShelf';
 import SearchBooks from './SearchBooks';
+import * as categories from './categories'
 
-const CATEGORY_CURRENTLY_READING = 'currentlyreading';
-const CATEGORY_WANT_TO_READ = 'wanttoread';
-const CATEGORY_READ = 'read';
 
 class BooksApp extends React.Component {
-  categories = [
-    CATEGORY_CURRENTLY_READING,
-    CATEGORY_WANT_TO_READ,
-    CATEGORY_READ
-  ];
-
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -29,7 +21,7 @@ class BooksApp extends React.Component {
 
   initBooksPerShelf() {
     const booksPerShelf = {};
-    this.categories.map(c => booksPerShelf[c] = []);
+    categories.keys.map(c => booksPerShelf[c] = []);
     return booksPerShelf;
   }
 
@@ -38,7 +30,7 @@ class BooksApp extends React.Component {
       .then(books => {
         books.forEach(book => {
           const shelf = book.shelf.toLowerCase();
-          if (!this.categories.includes(shelf))
+          if (!categories.keys.includes(shelf))
             return;
           this.setState(prevState => ({
             booksPerShelf: {
@@ -57,9 +49,9 @@ class BooksApp extends React.Component {
             <div className="list-books">
               <AppHeader headerText='MyReads' />
               <div className="list-books-content">
-                <BookShelf title='Currently Reading' books={this.state.booksPerShelf[CATEGORY_CURRENTLY_READING]} />
-                <BookShelf title='Want to Read' books={this.state.booksPerShelf[CATEGORY_WANT_TO_READ]} />
-                <BookShelf title='Read' books={this.state.booksPerShelf[CATEGORY_READ]} />
+                { categories.keys.map((key, index) => (
+                  <BookShelf key={index} title={categories.labels[index]} books={this.state.booksPerShelf[key]} />
+                ))}
               </div>
               <div className="open-search">
                 <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
