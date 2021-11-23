@@ -44,9 +44,20 @@ class SearchBookList extends Component {
 
     }
 
+    onShelfChange(book, shelf) {
+        this.setState(prevState => {
+            const updatedBooks = [...prevState.books];
+            updatedBooks.filter(b => b.id === book.id)[0].shelf = shelf;
+
+            return { books: updatedBooks };
+        });
+
+        this.props.onShelfChange(book, shelf);
+    }
+
     render() {
         return this.props.searchTerm ? <div className="search-books-grid">
-            <BookList books={this.state.books} onShelfChange={this.props.onShelfChange} />
+            <BookList books={this.state.books} onShelfChange={(book, shelf) => this.onShelfChange(book, shelf)} />
         </div> : null;
     }
 }
