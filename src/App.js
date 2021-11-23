@@ -16,7 +16,9 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    booksPerShelf: this.initBooksPerShelf()
+    booksPerShelf: this.initBooksPerShelf(),
+    updatedBookId: '',
+    updatedShelf: ''
   };
 
   initBooksPerShelf() {
@@ -44,6 +46,13 @@ class BooksApp extends React.Component {
       });
   }
 
+  componentDidUpdate(prevProp, prevState) {
+    if (prevState.updatedBookId !== this.state.updatedBookId || 
+      prevState.updatedShelf !== this.state.updatedShelf) {
+        BooksAPI.update({ id: this.state.updatedBookId }, this.state.updatedShelf);
+    }
+  }
+
   moveBookToShelf(book, shelf) {
     this.removeBookFromShelfs(book);
 
@@ -56,6 +65,11 @@ class BooksApp extends React.Component {
         }
       }));
     }
+
+    this.setState(() => ({
+      updatedBookId: book.id,
+      updatedShelf: shelf
+    }));
   }
 
   removeBookFromShelfs(book) {
