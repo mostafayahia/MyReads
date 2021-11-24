@@ -20,9 +20,9 @@ class BooksApp extends React.Component {
     updatedBook: {}
   };
 
-  componentDidMount() {
-    BooksAPI.getAll()
-      .then(books => this.setState(() => ({ allBooks: books })));
+  async componentDidMount() {
+    const books = await BooksAPI.getAll();
+    this.setState(() => ({ allBooks: books }));
   }
 
   componentDidUpdate(prevProp, prevState) {

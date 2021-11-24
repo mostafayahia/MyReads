@@ -19,10 +19,10 @@ class SearchBookList extends Component {
         }
     }
 
-    fetchData(searchTerm) {
+    async fetchData(searchTerm) {
         if (searchTerm) {
-            BooksAPI.search(searchTerm)
-                .then(books => this.updateSearchBooks(books));
+            const booksFromAPI = await BooksAPI.search(searchTerm);
+            this.updateSearchBooks(booksFromAPI);
         }
     }
 
