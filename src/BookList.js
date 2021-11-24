@@ -9,7 +9,7 @@ const BookList = ({ books, onShelfChange }) => (
                     id={book.id}
                     title={book.title}
                     authors={book.authors}
-                    imageURL={(book.imageLinks && book.imageLinks['thumbnail']) || book.imageURL || ''}
+                    imageLinks={book.imageLinks}
                     shelf={book.shelf}
                     onShelfChange={onShelfChange} />
             ))
