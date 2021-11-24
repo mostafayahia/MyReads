@@ -40,8 +40,9 @@ class BooksApp extends React.Component {
 
   moveBookToShelf(book, shelf) {
     this.setState(prevState => {
-      const updatedBooks = this.isBookInAllBooks(book, prevState) ?
-        [...prevState.allBooks] : prevState.allBooks.concat({ ...book });
+      const isBookInAllBooks = Boolean(prevState.allBooks.filter(b => b.id === book.id)[0]);
+      const updatedBooks = isBookInAllBooks ? [...prevState.allBooks] :
+        prevState.allBooks.concat({ ...book });
       updatedBooks.filter(b => b.id === book.id)[0].shelf = shelf;
       return {
         allBooks: updatedBooks,
@@ -51,10 +52,6 @@ class BooksApp extends React.Component {
         }
       };
     });
-  }
-
-  isBookInAllBooks(book, state) {
-    return Boolean(state.allBooks.filter(b => b.id === book.id)[0]);
   }
 
   render() {
