@@ -4,7 +4,7 @@ import * as BooksAPI from './utils/BooksAPI';
 
 class SearchBookList extends Component {
     state = {
-        books: []
+        searchBooks: []
     }
 
     // using componentDidUpdate is good incase fetching data whenever 
@@ -21,24 +21,24 @@ class SearchBookList extends Component {
     fetchData(searchTerm) {
         if (searchTerm) {
             BooksAPI.search(searchTerm)
-                .then(books => this.updateBooks(books));
+                .then(books => this.updateSearchBooks(books));
         }
     }
 
-    updateBooks(books) {
+    updateSearchBooks(booksFromAPI) {
         // if there is an error, we will clear books search result
-        if (!books || books.error) {
-            this.setState(() => ({ books: [] }));
+        if (!booksFromAPI || booksFromAPI.error) {
+            this.setState(() => ({ searchBooks: [] }));
             return;
         }
 
-        this.props.addShelfToBooks(books);
+        this.props.addShelfToBooks(booksFromAPI);
 
-        books.forEach((book, index) => {
+        booksFromAPI.forEach((book, index) => {
             if (index === 0) {
-                this.setState(() => ({ books: [] }));
+                this.setState(() => ({ searchBooks: [] }));
             } else {
-                this.setState(prevState => ({ books: [...prevState.books, book] }));
+                this.setState(prevState => ({ searchBooks: [...prevState.searchBooks, book] }));
             }
         });
 
@@ -46,10 +46,10 @@ class SearchBookList extends Component {
 
     onShelfChange(book, shelf) {
         this.setState(prevState => {
-            const updatedBooks = [...prevState.books];
+            const updatedBooks = [...prevState.searchBooks];
             updatedBooks.filter(b => b.id === book.id)[0].shelf = shelf;
 
-            return { books: updatedBooks };
+            return { searchBooks: updatedBooks };
         });
 
         this.props.onShelfChange(book, shelf);
@@ -57,7 +57,7 @@ class SearchBookList extends Component {
 
     render() {
         return this.props.searchTerm ? <div className="search-books-grid">
-            <BookList books={this.state.books} onShelfChange={(book, shelf) => this.onShelfChange(book, shelf)} />
+            <BookList books={this.state.searchBooks} onShelfChange={(book, shelf) => this.onShelfChange(book, shelf)} />
         </div> : null;
     }
 }
