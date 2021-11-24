@@ -14,18 +14,14 @@ class SearchBooks extends Component {
     }
 
     addShelfToBooks(books) {
-        const { booksPerShelf } = this.props;
+        const { allBooks } = this.props;
         if (!books || !books.length) {
             return;
         }
 
         books.forEach(book => {
-            categories.values.forEach(v => {
-                if (booksPerShelf[v].filter(book2 => book2.id === book.id)[0]) {
-                    book.shelf = v;
-                }
-            })
-            book.shelf = book.shelf || categories.NO_CATEGORY_VAL;
+            const b = allBooks.filter(b => b.id === book.id)[0];
+            book.shelf = (b && b.shelf) || categories.NO_CATEGORY_VAL;
         })
     }
 

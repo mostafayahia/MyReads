@@ -16,69 +16,34 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    booksPerShelf: this.initBooksPerShelf(),
-    updatedBookId: '',
-    updatedShelf: ''
+    allBooks: [],
+    updatedBook: {}
   };
-
-  initBooksPerShelf() {
-    const booksPerShelf = {};
-    categories.values.map(k => booksPerShelf[k] = []);
-    return booksPerShelf;
-  }
 
   componentDidMount() {
     BooksAPI.getAll()
-      .then(books => {
-        books.forEach(book => {
-          const shelf = book.shelf;
-
-          if (!categories.values.includes(shelf))
-            return;
-
-          this.setState(prevState => ({
-            booksPerShelf: {
-              ...prevState.booksPerShelf,
-              [shelf]: prevState.booksPerShelf[shelf].concat([book])
-            }
-          }))
-        })
-      });
+      .then(books => this.setState(() => ({ allBooks: books })));
   }
 
   componentDidUpdate(prevProp, prevState) {
-    if (prevState.updatedBookId !== this.state.updatedBookId || 
-      prevState.updatedShelf !== this.state.updatedShelf) {
-        BooksAPI.update({ id: this.state.updatedBookId }, this.state.updatedShelf);
+    if (JSON.stringify(prevState.updatedBook) !== JSON.stringify(this.state.updatedBook)) {
+      BooksAPI.update(this.state.updatedBook, this.state.updatedBook.shelf);
     }
   }
 
   moveBookToShelf(book, shelf) {
-    this.removeBookFromShelfs(book);
-
-    if (shelf !== categories.NO_CATEGORY_VAL) {
-      book = { ...book, shelf };
-      this.setState(prevState => ({
-        booksPerShelf: {
-          ...prevState.booksPerShelf,
-          [shelf]: prevState.booksPerShelf[shelf].concat([book])
+    this.setState(prevState => {
+      const updatedBooks = [...prevState.allBooks];
+      const updatedBook = updatedBooks.filter(b => b.id === book.id)[0] || book;
+      updatedBook.shelf = shelf;
+      return { 
+        allBooks: updatedBooks, 
+        updatedBook: {
+          id: updatedBook.id,
+          shelf
         }
-      }));
-    }
-
-    this.setState(() => ({
-      updatedBookId: book.id,
-      updatedShelf: shelf
-    }));
-  }
-
-  removeBookFromShelfs(book) {
-    categories.values.forEach(v => this.setState(prevState => ({
-      booksPerShelf: {
-        ...prevState.booksPerShelf,
-        [v]: prevState.booksPerShelf[v].filter(b => b.id !== book.id)
-      }
-    })));
+      };
+    });
   }
 
   render() {
@@ -91,7 +56,7 @@ class BooksApp extends React.Component {
               {categories.values.map((val, index) => (
                 <BookShelf key={index} title={categories.labels[index]}
                   onShelfChange={(book, shelf) => this.moveBookToShelf(book, shelf)}
-                  books={this.state.booksPerShelf[val]} />
+                  books={this.state.allBooks.filter(b => b.shelf === val)} />
               ))}
             </div>
             <div className="open-search">
@@ -99,7 +64,7 @@ class BooksApp extends React.Component {
             </div>
           </div>
         )} />
-        <Route path="/search" render={() => <SearchBooks booksPerShelf={this.state.booksPerShelf}
+        <Route path="/search" render={() => <SearchBooks allBooks={this.state.allBooks}
           onShelfChange={(book, shelf) => this.moveBookToShelf(book, shelf)} />} />
       </div>
     )
