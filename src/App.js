@@ -26,6 +26,13 @@ class BooksApp extends React.Component {
   }
 
   componentDidUpdate(prevProp, prevState) {
+    /* besides updating the state of books' shelfs,
+     * we need also to make a network request to update the 
+     * the shelf of a certain book so this function
+     * is a good place to make this request
+     * we have to make network request inside a condition below 
+     * to avoid infinite loop.
+     */
     if (JSON.stringify(prevState.updatedBook) !== JSON.stringify(this.state.updatedBook)) {
       BooksAPI.update(this.state.updatedBook, this.state.updatedBook.shelf);
     }
