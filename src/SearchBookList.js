@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BookList from './BookList';
 import * as BooksAPI from './utils/BooksAPI';
+import PropTypes from 'prop-types';
 
 class SearchBookList extends Component {
     state = {
@@ -61,5 +62,11 @@ class SearchBookList extends Component {
         </div> : null;
     }
 }
+
+SearchBookList.propTypes = {
+    searchTerm: PropTypes.string.isRequired,
+    onShelfChange: PropTypes.func.isRequired,
+    addShelfToBooks: PropTypes.func.isRequired
+};
 
 export default SearchBookList;

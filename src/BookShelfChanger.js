@@ -1,5 +1,6 @@
 import React from 'react';
 import * as categories from './categories';
+import PropTypes from 'prop-types';
 
 const categoriesVals = [...categories.values, categories.NO_CATEGORY_VAL];
 const categoriesLabels = [...categories.labels, categories.NO_CATEGORY_LABEL];
@@ -26,5 +27,11 @@ const BookShelfChanger = props => {
     );
 
 }
+
+BookShelfChanger.propTypes = {
+    book: PropTypes.object.isRequired,
+    shelf: PropTypes.string.isRequired,
+    onShelfChange: PropTypes.func.isRequired
+};
 
 export default BookShelfChanger;

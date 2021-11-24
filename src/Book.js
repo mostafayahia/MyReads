@@ -1,6 +1,7 @@
 import React from 'react';
 import BookShelfChanger from './BookShelfChanger';
 import { NO_CATEGORY_VAL } from './categories';
+import PropTypes from 'prop-types';
 
 const Book = (props) => (
     <li>
@@ -19,5 +20,14 @@ const Book = (props) => (
         </div>
     </li>
 );
+
+Book.propTypes = {
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    authors: PropTypes.array,
+    imageLinks: PropTypes.object,
+    shelf: PropTypes.string.isRequired,
+    onShelfChange: PropTypes.func.isRequired
+};
 
 export default Book;
